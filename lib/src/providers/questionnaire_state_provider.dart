@@ -4,47 +4,77 @@ import 'package:take_a_break/take_a_break.dart';
 class QuestionnaireStateProvider extends StateNotifier<Questionnaire> {
   QuestionnaireStateProvider() : super(Questionnaire());
 
-  ///[addTaskDone] adds a task that the user has prior experience in
+  /// Adds a task
   void addTaskDone(Task task) {
-    final oldTasks = state.tasksDone ?? [];
-    state.tasksDone=oldTasks..add(task);
-    print("task to add is $task and state task is ${state.tasksDone}");
+    final oldTasks = List<Task>.from(state.tasksDone ?? []);
+    oldTasks.add(task);
+    state = state.copyWith(
+        tasksDone: oldTasks,
+        dateOfBirth: state.dateOfBirth,
+        hasPhoneForJob: state.hasPhoneForJob,
+        hasUsedMaps: state.hasUsedMaps,
+        hasPhone: state.hasPhone);
   }
 
-  ///[removeTaskDone] removes a task that the user had previously marked
+  /// Removes a task
   void removeTaskDone(Task task) {
-    final oldTasks = state.tasksDone ?? [];
-    if(oldTasks.isNotEmpty){
-      int matchingIndex=oldTasks.indexWhere((element) => element==task,);
-      if(matchingIndex!=-1){
-        oldTasks.removeAt(matchingIndex);
-        state.tasksDone=oldTasks;
-        print("task removed zt");
-      }
-      print(state.tasksDone);
-    }
+    final oldTasks = List<Task>.from(state.tasksDone ?? []);
+    oldTasks.remove(task);
+    state = state.copyWith(
+        tasksDone: oldTasks,
+        dateOfBirth: state.dateOfBirth,
+        hasPhoneForJob: state.hasPhoneForJob,
+        hasUsedMaps: state.hasUsedMaps,
+        hasPhone: state.hasPhone);
   }
 
-  ///[updateDateOfBirth] updates date of birth
+  /// Updates date of birth
   void updateDateOfBirth(DateTime dob) {
-    state.dateOfBirth = dob;
+    state = state.copyWith(
+        dateOfBirth: dob,
+        hasPhone: state.hasPhone,
+        hasPhoneForJob: state.hasPhoneForJob,
+        hasUsedMaps: state.hasUsedMaps,
+        tasksDone: state.tasksDone);
   }
 
-  void resetDateOfBirth(){
-    state.dateOfBirth=null;
+  /// Resets date of birth
+  void resetDateOfBirth() {
+    state = state.copyWith(
+        dateOfBirth: null,
+        hasPhone: state.hasPhone,
+        hasPhoneForJob: state.hasPhoneForJob,
+        hasUsedMaps: state.hasUsedMaps,
+        tasksDone: state.tasksDone);
   }
 
-  ///[updateQA] sets true and false for respective questions
+  /// Updates answers to questions
   void updateQA(Question question, bool? answer) {
     switch (question) {
       case Question.hasPhone:
-        state.hasPhone = answer;
+        state = state.copyWith(
+            hasPhone: answer,
+            dateOfBirth: state.dateOfBirth,
+            hasPhoneForJob: state.hasPhoneForJob,
+            hasUsedMaps: state.hasUsedMaps,
+            tasksDone: state.tasksDone);
         break;
       case Question.usedMaps:
-        state.hasUsedMaps = answer;
+        state = state.copyWith(
+            hasUsedMaps: answer,
+            dateOfBirth: state.dateOfBirth,
+            hasPhoneForJob: state.hasPhoneForJob,
+            hasPhone: state.hasPhone,
+            tasksDone: state.tasksDone);
         break;
       case Question.canBringPhone:
-        state.hasPhoneForJob = answer;
+        state = state.copyWith(
+            hasPhoneForJob: answer,
+            dateOfBirth: state.dateOfBirth,
+            hasPhone: state.hasPhone,
+            hasUsedMaps: state.hasUsedMaps,
+            tasksDone: state.tasksDone);
+        break;
     }
   }
 }

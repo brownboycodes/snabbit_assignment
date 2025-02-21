@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:take_a_break/take_a_break.dart';
 
 class YesNoForm extends ConsumerStatefulWidget {
-  const YesNoForm({super.key, required this.question,required this.viewModel});
+  const YesNoForm({super.key, required this.question, required this.viewModel});
 
   ///[question] is the [Question] object for which answers will be updated
   final Question question;
@@ -57,11 +57,21 @@ class _YesNoFormState extends ConsumerState<YesNoForm>
                         width: 2),
                     shape: CircleBorder(),
                     onChanged: (bool? value) {
-                      if (value != null && value != _isYesSelected) {
+                      if (value != null) {
+                        bool? answer = value;
+                        if (_isYesSelected && value == false) {
+                          answer = null;
+                        }
                         setState(() {
                           _isYesSelected = value;
                         });
-                        widget.viewModel.updateQA(widget.question, true);
+                        widget.viewModel.updateQA(widget.question, answer);
+
+                        if (value && _isNoSelected) {
+                          setState(() {
+                            _isNoSelected = false;
+                          });
+                        }
                       }
                     },
                   ),
@@ -79,52 +89,60 @@ class _YesNoFormState extends ConsumerState<YesNoForm>
                 )
               ],
             ),
-            const SizedBox(width: 20,),
-            Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            SizedBox(
-              height: 24,
-              width: 24,
-              child: Checkbox(
-                checkColor: Colors.white,
-                fillColor: WidgetStateProperty.resolveWith(getColor),
-                value: _isNoSelected && !_isYesSelected,
-                side: BorderSide(
-                    color: Color(_isNoSelected && !_isYesSelected
-                        ? 0xFF371382
-                        : 0xFFD8DAE5),
-                    width: 2),
-                shape: CircleBorder(),
-                onChanged: (bool? value) {
-                  if (value != null && value != _isNoSelected) {
-                    setState(() {
-                      _isNoSelected = value;
-                    });
-                    widget.viewModel.updateQA(widget.question, false);
-                    print("jnllnlnlkne");
-                  }
-                  print("value is $value");
-                },
-              ),
-            ),
             const SizedBox(
-              width: 4,
+              width: 20,
             ),
-            Text(
-              QuestionnaireScreenConstants.no,
-              style: TextStyle(
-                  color: Color(0xFF525871),
-                  fontSize: 13,
-                  letterSpacing: -0.24,
-                  fontWeight: FontWeight.w500),
-            )
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                SizedBox(
+                  height: 24,
+                  width: 24,
+                  child: Checkbox(
+                    checkColor: Colors.white,
+                    fillColor: WidgetStateProperty.resolveWith(getColor),
+                    value: _isNoSelected && !_isYesSelected,
+                    side: BorderSide(
+                        color: Color(_isNoSelected && !_isYesSelected
+                            ? 0xFF371382
+                            : 0xFFD8DAE5),
+                        width: 2),
+                    shape: CircleBorder(),
+                    onChanged: (bool? value) {
+                      if (value != null) {
+                        bool? answer = value;
+                        if (_isNoSelected && value == false) {
+                          answer = null;
+                        }
+                        setState(() {
+                          _isNoSelected = value;
+                        });
+                        widget.viewModel.updateQA(widget.question, answer);
+                         if (value && _isYesSelected) {
+                          setState(() {
+                            _isYesSelected = false;
+                          });
+                        }
+                      }
+                    },
+                  ),
+                ),
+                const SizedBox(
+                  width: 4,
+                ),
+                Text(
+                  QuestionnaireScreenConstants.no,
+                  style: TextStyle(
+                      color: Color(0xFF525871),
+                      fontSize: 13,
+                      letterSpacing: -0.24,
+                      fontWeight: FontWeight.w500),
+                )
+              ],
+            ),
           ],
         ),
-          ],
-        ),
-
         const SizedBox(
           height: 32,
         ),

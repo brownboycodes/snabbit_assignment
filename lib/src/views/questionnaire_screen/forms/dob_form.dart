@@ -30,6 +30,23 @@ class DobFormState extends ConsumerState<DobForm> {
     super.initState();
   }
 
+  void _onFormUpdated(String value) {
+    try{
+      final day = int.parse(dayController.text);
+      final month = int.parse(monthController.text);
+      final year = int.parse(yearController.text);
+      if ((day > 0 && day <= 31) &&
+          (month > 0 && month <= 12) &&
+          (year > 0 && year < 10000)) {
+        widget.viewModel.updateDateOfBirth(DateTime(year, month, day));
+      } else {
+        widget.viewModel.resetDob();
+      }
+    }catch(error){
+      widget.viewModel.resetDob();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -49,18 +66,6 @@ class DobFormState extends ConsumerState<DobForm> {
         ),
         Form(
           key: _formKey,
-          onChanged: () {
-            final day = int.parse(dayController.text);
-            final month = int.parse(monthController.text);
-            final year = int.parse(yearController.text);
-            if ((day > 0 && day <= 31) &&
-                (month > 0 && month <= 12) &&
-                (year > 0 && year < 10000)) {
-              widget.viewModel.updateDateOfBirth(DateTime(year, month, day));
-            } else {
-              widget.viewModel.resetDob();
-            }
-          },
           child: Wrap(
             // crossAxisAlignment: CrossAxisAlignment.start,
             spacing: 8,
@@ -75,12 +80,7 @@ class DobFormState extends ConsumerState<DobForm> {
                   keyboardType: TextInputType.number,
                   maxLength: 2,
                   textAlign: TextAlign.center,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter some text';
-                    }
-                    return null;
-                  },
+                  onChanged: _onFormUpdated,
                   onTapOutside: (event) {
                     if (FocusManager.instance.primaryFocus != null) {
                       FocusManager.instance.primaryFocus?.unfocus();
@@ -110,13 +110,7 @@ class DobFormState extends ConsumerState<DobForm> {
                   keyboardType: TextInputType.number,
                   maxLength: 2,
                   textAlign: TextAlign.center,
-                  // The validator receives the text that the user has entered.
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter some text';
-                    }
-                    return null;
-                  },
+                 onChanged: _onFormUpdated,
                   onTapOutside: (event) {
                     if (FocusManager.instance.primaryFocus != null) {
                       FocusManager.instance.primaryFocus?.unfocus();
@@ -141,18 +135,12 @@ class DobFormState extends ConsumerState<DobForm> {
                   keyboardType: TextInputType.number,
                   maxLength: 4,
                   textAlign: TextAlign.center,
-                  // The validator receives the text that the user has entered.
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter some text';
-                    }
-                    return null;
-                  },
                   onTapOutside: (event) {
                     if (FocusManager.instance.primaryFocus != null) {
                       FocusManager.instance.primaryFocus?.unfocus();
                     }
                   },
+                  onChanged: _onFormUpdated,
                   decoration: InputDecoration(
                       hintText: "YYYY", counter: const SizedBox()),
                   style: TextStyle(

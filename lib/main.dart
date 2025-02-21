@@ -47,7 +47,7 @@ inputDecorationTheme: InputDecorationTheme(
       ),
         useMaterial3: true,
       ),
-      home: BreakScreen(),
+      home: LoginScreen(),
     );
   }
 }

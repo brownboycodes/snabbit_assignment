@@ -13,6 +13,7 @@ class _LoginScreenState extends State<LoginScreen> with CheckboxHelperUtils {
   bool _canProceed = false;
   late TextEditingController usernameController;
   late TextEditingController passwordController;
+  bool _hasReferral=false;
 
   @override
   void initState() {
@@ -116,11 +117,16 @@ class _LoginScreenState extends State<LoginScreen> with CheckboxHelperUtils {
                       child: Checkbox(
                         checkColor: Colors.white,
                         fillColor: WidgetStateProperty.resolveWith(getColor),
-                        // value: _isNoSelected && !_isYesSelected,
-                        value: false,
+                        value: _hasReferral,
                         side: BorderSide(color: Color(0xFFD8DAE5), width: 2),
                         shape: CircleBorder(),
-                        onChanged: (bool? value) {},
+                        onChanged: (bool? value) {
+                          if(value!=null){
+                            setState(() {
+                            _hasReferral=value;
+                          });
+                          }
+                        },
                       ),
                     ),
                     const SizedBox(

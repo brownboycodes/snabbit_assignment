@@ -22,4 +22,20 @@ class Questionnaire {
 
   ///[dateOfBirth] contains birthday of the user
   DateTime? dateOfBirth;
+
+  Questionnaire copyWith({
+    List<Task>? tasksDone,
+    DateTime? dateOfBirth,
+    bool? hasPhone,
+    bool? hasUsedMaps,
+    bool? hasPhoneForJob,
+  }) {
+    return Questionnaire(
+      tasksDone: tasksDone ?? this.tasksDone,
+      dateOfBirth: dateOfBirth,
+      hasPhone: hasPhone,
+      hasUsedMaps: hasUsedMaps,
+      hasPhoneForJob: hasPhoneForJob,
+    );
+  }
 }

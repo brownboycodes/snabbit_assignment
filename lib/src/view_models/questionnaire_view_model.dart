@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:take_a_break/take_a_break.dart';
 
@@ -11,7 +10,7 @@ class QuestionnaireViewModel {
   Questionnaire get state => ref.watch(questionnaireStateProvider);
 
   ///[updateQA] sets true and false for respective questions
-  void updateQA(Question question, bool answer) {
+  void updateQA(Question question, bool? answer) {
     ref.read(questionnaireStateProvider.notifier).updateQA(question, answer);
   }
 
