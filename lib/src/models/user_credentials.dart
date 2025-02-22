@@ -10,4 +10,19 @@ class UserCredentials {
 
   ///[hasReferralCode] indicates if User has a referral code
   final bool? hasReferralCode;
+
+  Map<String, dynamic> toJson() {
+    return {
+      'username': username,
+      'password': password,
+      'hasReferralCode': hasReferralCode
+    };
+  }
+
+  factory UserCredentials.fromJson(Map<String, dynamic> json) {
+    return UserCredentials(
+        username: json['username'],
+        password: json['password'],
+        hasReferralCode: json['hasReferralCode']);
+  }
 }

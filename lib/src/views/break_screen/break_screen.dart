@@ -20,7 +20,8 @@ class _BreakScreenState extends State<BreakScreen> {
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
-            onPressed: () {},
+            onPressed: () {
+            },
             padding: EdgeInsets.zero,
             icon: Image.asset(
               AssetConstants.hamburgerMenu,
@@ -61,7 +62,10 @@ class _BreakScreenState extends State<BreakScreen> {
             width: 24,
           ),
           IconButton(
-              onPressed: () {},
+              onPressed: () async{
+                 SharedPreferencesService().deletePath();
+                Navigator.pop(context);
+              },
               padding: EdgeInsets.symmetric(vertical: 6, horizontal: 12),
               style: IconButton.styleFrom(
                   shape: RoundedRectangleBorder(

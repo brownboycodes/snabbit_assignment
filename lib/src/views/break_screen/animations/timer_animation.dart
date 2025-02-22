@@ -89,7 +89,6 @@ _controller.addStatusListener((status) {
               // animation: _animation,
               animation: _controller,
               builder: (context, child) {
-                print("time is + ${_controller.value}");
                 return SfRadialGauge(
                   axes: [
                     RadialAxis(

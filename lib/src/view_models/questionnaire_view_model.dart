@@ -31,7 +31,7 @@ class QuestionnaireViewModel {
     if (state.dateOfBirth != null) {
       count++;
     }
-    print("count is $count");
+
     return count;
   }
 
@@ -54,14 +54,11 @@ extension TasksDoneFormViewModel on QuestionnaireViewModel {
     } else if (value == false) {
       if (isTaskAdded(task)) {
         removeTaskDone(task);
-        print("remove task $value");
         if(onRemove!=null){
           onRemove(task);
         }
       }
-      print("after remove task $value");
     }
-    print("on change task $value");
   }
 
   ///[addTaskDone] adds a task that the user has prior experience in

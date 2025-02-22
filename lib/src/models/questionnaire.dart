@@ -38,4 +38,29 @@ class Questionnaire {
       hasPhoneForJob: hasPhoneForJob,
     );
   }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'tasksDone': tasksDone
+          ?.map(
+            (e) => e.index,
+          )
+          .toList(),
+      'hasPhone': hasPhone,
+      'hasPhoneForJob': hasPhoneForJob,
+      'hasUsedMaps': hasUsedMaps,
+      'dateOfBirth': dateOfBirth?.toString()
+    };
+  }
+
+  factory Questionnaire.fromJson(Map<String, dynamic> json) {
+    return Questionnaire(
+        tasksDone: (json['tasksDone'] as List?)
+            ?.map((task) => Task.values[task as int])
+            .toList(),
+        hasUsedMaps: json['hasUsedMaps'],
+        hasPhone: json['hasPhone'],
+        hasPhoneForJob: json['hasPhoneForJob'],
+        dateOfBirth: json['dateOfBirth']);
+  }
 }

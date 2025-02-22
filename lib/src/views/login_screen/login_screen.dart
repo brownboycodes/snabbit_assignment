@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:take_a_break/take_a_break.dart';
 
 class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+  const LoginScreen({super.key,required this.sharedPreferencesService});
+
+  ///using dependency injection
+  final SharedPreferencesService sharedPreferencesService;
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();
@@ -13,12 +16,12 @@ class _LoginScreenState extends State<LoginScreen> with CheckboxHelperUtils {
   bool _canProceed = false;
   late TextEditingController usernameController;
   late TextEditingController passwordController;
-  bool _hasReferral=false;
+  bool _hasReferral = false;
 
   @override
   void initState() {
-    usernameController=TextEditingController();
-    passwordController=TextEditingController();
+    usernameController = TextEditingController();
+    passwordController = TextEditingController();
     super.initState();
   }
 
@@ -44,10 +47,10 @@ class _LoginScreenState extends State<LoginScreen> with CheckboxHelperUtils {
               const SizedBox(
                 height: 16,
               ),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8.0),
+              SizedBox(
+                height: 50,
                 child: TextFormField(
-                  controller: usernameController,
+                    controller: usernameController,
                     textAlign: TextAlign.start,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
@@ -63,20 +66,23 @@ class _LoginScreenState extends State<LoginScreen> with CheckboxHelperUtils {
                     onChanged: _onTextFormChanged,
                     decoration: InputDecoration(
                         hintText: LoginScreenConstants.usernameHint,
+                        contentPadding: EdgeInsets.symmetric(vertical: 15,horizontal: 16),
                         counter: const SizedBox()),
                     style: TextStyle(
-                        color: Color(0xFF371382),
+                        color: Color(0xFF101840),
                         fontSize: 13,
                         letterSpacing: -0.24,
                         fontWeight: FontWeight.w500)),
               ),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8.0),
+              const SizedBox(height: 16,),
+              Container(
+                height: 50,
                 child: TextFormField(
                   controller: passwordController,
                   keyboardType: TextInputType.number,
                   //following the design provided
                   obscureText: true,
+                  obscuringCharacter: '●',
                   maxLength: 24,
                   textAlign: TextAlign.start,
                   validator: (value) {
@@ -94,10 +100,11 @@ class _LoginScreenState extends State<LoginScreen> with CheckboxHelperUtils {
                   },
                   decoration: InputDecoration(
                       hintText: LoginScreenConstants.passwordHint,
+                      contentPadding: EdgeInsets.symmetric(horizontal: 16),
                       counter: const SizedBox()),
                   style: TextStyle(
-                      color: Color(0xFF371382),
-                      fontSize: 13,
+                      color: Color(0xFF101840),
+                      fontSize: passwordController.text.isNotEmpty? 28:13,
                       letterSpacing: -0.24,
                       fontWeight: FontWeight.w500),
                 ),
@@ -121,10 +128,10 @@ class _LoginScreenState extends State<LoginScreen> with CheckboxHelperUtils {
                         side: BorderSide(color: Color(0xFFD8DAE5), width: 2),
                         shape: CircleBorder(),
                         onChanged: (bool? value) {
-                          if(value!=null){
+                          if (value != null) {
                             setState(() {
-                            _hasReferral=value;
-                          });
+                              _hasReferral = value;
+                            });
                           }
                         },
                       ),
@@ -190,14 +197,26 @@ class _LoginScreenState extends State<LoginScreen> with CheckboxHelperUtils {
                     children: [
                       Expanded(
                         child: TextButton(
-                          onPressed: () {
+                          onPressed: () async {
                             if (_formKey.currentState!.validate()) {
-                              // _formKey.currentState?.save();
-                              Navigator.pushReplacement(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => QuestionnaireScreen(),
-                                  ));
+                              final userCredentials = UserCredentials(
+                                  username: usernameController.text,
+                                  password: passwordController.text,
+                                  hasReferralCode: _hasReferral);
+                              final firestoreService = FirestoreService();
+                              final doc = await firestoreService
+                                  .createUser(userCredentials);
+                              widget.sharedPreferencesService.savePath(doc.id);
+                              if (mounted) {
+                                Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => QuestionnaireScreen(
+                                        doc: doc,
+                                        firestoreService: firestoreService,
+                                      ),
+                                    ));
+                              }
                             }
                           },
                           style: TextButton.styleFrom(

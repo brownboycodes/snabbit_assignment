@@ -1,9 +1,16 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:take_a_break/take_a_break.dart';
 
 class QuestionnaireScreen extends ConsumerStatefulWidget {
-  const QuestionnaireScreen({super.key});
+  const QuestionnaireScreen(
+      {super.key, required this.doc, required this.firestoreService});
+
+  final DocumentReference doc;
+
+  //obtaining Firestore service via dependency injection
+  final FirestoreService firestoreService;
 
   @override
   ConsumerState<QuestionnaireScreen> createState() =>
@@ -22,7 +29,35 @@ class _QuestionnaireScreenState extends ConsumerState<QuestionnaireScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        leading: IconButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            padding: EdgeInsets.zero,
+            icon: Icon(Icons.arrow_back_ios_new_rounded,
+                color: Color(0xFF404055), size: 24)),
+        bottom: PreferredSize(
+          preferredSize: Size.fromHeight(6),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: TweenAnimationBuilder<double>(
+                duration: const Duration(milliseconds: 250),
+                curve: Curves.easeInOut,
+                tween: Tween<double>(
+                  begin: 0,
+                  end: viewModel.getFilledFormCount().toDouble(),
+                ),
+                builder: (context, value, _) => LinearProgressIndicator(
+                      value: value / 5,
+                      color: Color(0xFF3030D6),
+                      backgroundColor: Color(0xFFD8DAE5),
+                      borderRadius: BorderRadius.circular(6),
+                      minHeight: 6,
+                    )),
+          ),
+        ),
+      ),
       resizeToAvoidBottomInset: false,
       body: SingleChildScrollView(
         child: Container(
@@ -31,22 +66,8 @@ class _QuestionnaireScreenState extends ConsumerState<QuestionnaireScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              TweenAnimationBuilder<double>(
-                  duration: const Duration(milliseconds: 250),
-                  curve: Curves.easeInOut,
-                  tween: Tween<double>(
-                    begin: 0,
-                    end: viewModel.getFilledFormCount().toDouble(),
-                  ),
-                  builder: (context, value, _) => LinearProgressIndicator(
-                        value: value / 5,
-                        color: Color(0xFF3030D6),
-                        backgroundColor: Color(0xFFD8DAE5),
-                        borderRadius: BorderRadius.circular(6),
-                        minHeight: 6,
-                      )),
               const SizedBox(
-                height: 32,
+                height: 20,
               ),
               Text(
                 QuestionnaireScreenConstants.title,
@@ -70,7 +91,6 @@ class _QuestionnaireScreenState extends ConsumerState<QuestionnaireScreen> {
               TasksDoneForm(
                 viewModel: viewModel,
               ),
-              // YesNoForm(question: Question.hasPhone),
               ...Question.values.map(
                 (e) => YesNoForm(
                   question: e,
@@ -80,43 +100,6 @@ class _QuestionnaireScreenState extends ConsumerState<QuestionnaireScreen> {
               DobForm(
                 viewModel: viewModel,
               ),
-              // Spacer(),
-              //             Expanded(child: SizedBox()),
-              //         Container(
-              //   margin: EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-              //   constraints: BoxConstraints(maxHeight: 48, maxWidth: double.maxFinite),
-              //   child: Row(
-              //     children: [
-              //       Expanded(
-              //         child: TextButton(
-              //           onPressed: () {
-              //             if (viewModel.validateForm()) {
-              //               Navigator.push(
-              //                   context,
-              //                   MaterialPageRoute(
-              //                     builder: (context) => BreakScreen(),
-              //                   ));
-              //             }
-              //           },
-              //           style: TextButton.styleFrom(
-              //               disabledBackgroundColor: Color(0xFFEAEAF1),
-              //               backgroundColor: viewModel.validateForm()?Color(0xFF371382):Color(0xFFEAEAF1),
-              //               shape: RoundedRectangleBorder(
-              //                   borderRadius: BorderRadius.circular(8)),
-              //               padding: EdgeInsets.symmetric(vertical: 14.5)),
-              //           child: Text(
-              //             ButtonTextConstants.continueForward,
-              //             style: TextStyle(
-              //                 fontSize: 13,
-              //                 fontWeight: FontWeight.w600,
-              //                 letterSpacing: 0,
-              //                 color:viewModel.validateForm()? Colors.white:Color(0xFF8F95B2)),
-              //           ),
-              //         ),
-              //       ),
-              //     ],
-              //   ),
-              // )
             ],
           ),
         ),
@@ -128,9 +111,14 @@ class _QuestionnaireScreenState extends ConsumerState<QuestionnaireScreen> {
           children: [
             Expanded(
               child: TextButton(
-                onPressed: () {
+                onPressed: () async {
                   if (viewModel.validateForm()) {
-                    Navigator.push(
+                    final questionnaire = ref.read(questionnaireStateProvider);
+                    widget.firestoreService
+                        .updateQuestionnaire(widget.doc, questionnaire);
+                    final doc = await widget.doc.get();
+                    doc.data();
+                    Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
                           builder: (context) => BreakScreen(),
