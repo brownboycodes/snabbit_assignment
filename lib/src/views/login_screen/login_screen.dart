@@ -17,6 +17,7 @@ class _LoginScreenState extends State<LoginScreen> with CheckboxHelperUtils {
   late TextEditingController usernameController;
   late TextEditingController passwordController;
   bool _hasReferral = false;
+  bool pageIsLoading = false;
 
   @override
   void initState() {
@@ -200,6 +201,9 @@ class _LoginScreenState extends State<LoginScreen> with CheckboxHelperUtils {
                         child: TextButton(
                           onPressed: () async {
                             if (_formKey.currentState!.validate()) {
+                              setState(() {
+                                pageIsLoading = true;
+                              });
                               final userCredentials = UserCredentials(
                                   username: usernameController.text,
                                   password: passwordController.text,
@@ -217,6 +221,10 @@ class _LoginScreenState extends State<LoginScreen> with CheckboxHelperUtils {
                                         firestoreService: firestoreService,
                                       ),
                                     ));
+                              } else {
+                                setState(() {
+                                  pageIsLoading = false;
+                                });
                               }
                             }
                           },
@@ -228,16 +236,24 @@ class _LoginScreenState extends State<LoginScreen> with CheckboxHelperUtils {
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(8)),
                               padding: EdgeInsets.symmetric(vertical: 14.5)),
-                          child: Text(
-                            ButtonTextConstants.continueForward,
-                            style: TextStyle(
-                                fontSize: 13,
-                                fontWeight: FontWeight.w600,
-                                letterSpacing: 0,
-                                color: _canProceed
-                                    ? Colors.white
-                                    : Color(0xFF8F95B2)),
-                          ),
+                          child: pageIsLoading
+                              ? SizedBox(
+                                  height: 16,
+                                  width: 16,
+                                  child: CircularProgressIndicator(
+                                    color: Colors.white,
+                                  ),
+                                )
+                              : Text(
+                                  ButtonTextConstants.continueForward,
+                                  style: TextStyle(
+                                      fontSize: 13,
+                                      fontWeight: FontWeight.w600,
+                                      letterSpacing: 0,
+                                      color: _canProceed
+                                          ? Colors.white
+                                          : Color(0xFF8F95B2)),
+                                ),
                         ),
                       ),
                     ],

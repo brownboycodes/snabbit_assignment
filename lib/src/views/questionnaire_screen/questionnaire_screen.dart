@@ -19,6 +19,7 @@ class QuestionnaireScreen extends ConsumerStatefulWidget {
 
 class _QuestionnaireScreenState extends ConsumerState<QuestionnaireScreen> {
   late QuestionnaireViewModel viewModel;
+  bool pageIsLoading = false;
 
   @override
   void initState() {
@@ -113,6 +114,9 @@ class _QuestionnaireScreenState extends ConsumerState<QuestionnaireScreen> {
               child: TextButton(
                 onPressed: () async {
                   if (viewModel.validateForm()) {
+                    setState(() {
+                      pageIsLoading = true;
+                    });
                     final questionnaire = ref.read(questionnaireStateProvider);
                     widget.firestoreService
                         .updateQuestionnaire(widget.doc, questionnaire);
@@ -132,6 +136,10 @@ class _QuestionnaireScreenState extends ConsumerState<QuestionnaireScreen> {
                                   userData.userCredentials?.username ?? '',
                             ),
                           ));
+                    } else {
+                      setState(() {
+                        pageIsLoading = false;
+                      });
                     }
                   }
                 },
@@ -143,16 +151,22 @@ class _QuestionnaireScreenState extends ConsumerState<QuestionnaireScreen> {
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8)),
                     padding: EdgeInsets.symmetric(vertical: 14.5)),
-                child: Text(
-                  ButtonTextConstants.continueForward,
-                  style: TextStyle(
-                      fontSize: 13,
-                      fontWeight: FontWeight.w600,
-                      letterSpacing: 0,
-                      color: viewModel.validateForm()
-                          ? Colors.white
-                          : Color(0xFF8F95B2)),
-                ),
+                child: pageIsLoading
+                    ? SizedBox(
+                        height: 16,
+                        width: 16,
+                        child: CircularProgressIndicator(color: Colors.white,),
+                      )
+                    : Text(
+                        ButtonTextConstants.continueForward,
+                        style: TextStyle(
+                            fontSize: 13,
+                            fontWeight: FontWeight.w600,
+                            letterSpacing: 0,
+                            color: viewModel.validateForm()
+                                ? Colors.white
+                                : Color(0xFF8F95B2)),
+                      ),
               ),
             ),
           ],

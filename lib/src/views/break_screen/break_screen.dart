@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:take_a_break/take_a_break.dart';
 
 class BreakScreen extends StatefulWidget {
@@ -17,14 +18,14 @@ class _BreakScreenState extends State<BreakScreen> {
   bool _isCancelled = false;
   late DateTime currentTime;
   late DateTime breakEndsAt;
+  final formatter = DateFormat('hh:mm a');
+
   @override
   void initState() {
-    currentTime=DateTime.now();
-    breakEndsAt=currentTime.add(widget.duration??Duration.zero);
+    currentTime = DateTime.now();
+    breakEndsAt = currentTime.add(widget.duration ?? Duration.zero);
     super.initState();
   }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -34,8 +35,7 @@ class _BreakScreenState extends State<BreakScreen> {
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
-            onPressed: () {
-            },
+            onPressed: () {},
             padding: EdgeInsets.zero,
             icon: Image.asset(
               AssetConstants.hamburgerMenu,
@@ -76,9 +76,15 @@ class _BreakScreenState extends State<BreakScreen> {
             width: 24,
           ),
           IconButton(
-              onPressed: () async{
-                 SharedPreferencesService().deletePath();
-                Navigator.pop(context);
+              onPressed: () async {
+                final sharedPreferencesService = SharedPreferencesService();
+                sharedPreferencesService.deletePath();
+                Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => LoginScreen(
+                          sharedPreferencesService: sharedPreferencesService),
+                    ));
               },
               padding: EdgeInsets.symmetric(vertical: 6, horizontal: 12),
               style: IconButton.styleFrom(
@@ -182,7 +188,9 @@ class _BreakScreenState extends State<BreakScreen> {
                             const SizedBox(
                               height: 64,
                             ),
-                            SizedBox(height: 20,),
+                            SizedBox(
+                              height: 20,
+                            ),
                             Container(
                               height: 123,
                               width: 123,
@@ -209,14 +217,12 @@ class _BreakScreenState extends State<BreakScreen> {
                                     decoration: BoxDecoration(
                                         color: Colors.white,
                                         shape: BoxShape.circle),
-                                    // child: Icon(
-                                    //  _isCancelled?Icons.close : Icons.check,
-                                    //   size: 24,
-                                    //   color: Color(0xFF494FD8),
-                                    // ),
                                     child: Image.asset(
-                                      _isCancelled?AssetConstants.cancelled:AssetConstants.completed,
-                                      height: 24,width: 24,
+                                      _isCancelled
+                                          ? AssetConstants.cancelled
+                                          : AssetConstants.completed,
+                                      height: 24,
+                                      width: 24,
                                     ),
                                   ),
                                 ],
@@ -226,7 +232,9 @@ class _BreakScreenState extends State<BreakScreen> {
                               height: 24,
                             ),
                             Text(
-                             _isCancelled?"You cancelled your break": "Hope you are feeling refreshed and ready to start working again",
+                              _isCancelled
+                                  ? "You cancelled your break"
+                                  : "Hope you are feeling refreshed and ready to start working again",
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                   fontSize: 17,
@@ -278,7 +286,7 @@ class _BreakScreenState extends State<BreakScreen> {
                                           width: 0.618))),
                               alignment: Alignment.center,
                               child: Text(
-                                "Break ends at 01:30 PM",
+                                "Break ends at ${formatter.format(breakEndsAt)}",
                                 style: TextStyle(
                                     fontSize: 17,
                                     fontWeight: FontWeight.w600,
