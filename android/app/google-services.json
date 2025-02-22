@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "708307147773",
+    "project_id": "crud-ops-test",
+    "storage_bucket": "crud-ops-test.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:708307147773:android:328067800f5bf9df421794",
+        "android_client_info": {
+          "package_name": "com.brownboycodes.takeABreak.take_a_break"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB8TEsi1Q95OCdpigDHU_J4q0AR8wkFpc8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
