@@ -59,8 +59,9 @@ class _QuestionnaireScreenState extends ConsumerState<QuestionnaireScreen> {
           ),
         ),
       ),
-      resizeToAvoidBottomInset: false,
+      resizeToAvoidBottomInset: true,
       body: SingleChildScrollView(
+        reverse: true,
         child: Container(
           padding: EdgeInsets.all(16),
           height: MediaQuery.of(context).size.height,

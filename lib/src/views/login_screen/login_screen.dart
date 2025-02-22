@@ -272,7 +272,9 @@ class _LoginScreenState extends State<LoginScreen> with CheckboxHelperUtils {
       setState(() {
         _canProceed = false;
       });
-    } else if (_canProceed == false) {
+    } else if (_canProceed == false &&
+        usernameController.text.isNotEmpty &&
+        passwordController.text.isNotEmpty) {
       setState(() {
         _canProceed = true;
       });
