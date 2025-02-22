@@ -46,16 +46,15 @@ class _YesNoFormState extends ConsumerState<YesNoForm>
                 SizedBox(
                   height: 24,
                   width: 24,
-                  child: Checkbox(
+                  child: CustomCheckbox(
                     checkColor: Colors.white,
-                    fillColor: WidgetStateProperty.resolveWith(getColor),
+                    backgroundColor: _isYesSelected && !_isNoSelected?Color(
+                          0xFF371382):Colors.transparent,
                     value: _isYesSelected && !_isNoSelected,
-                    side: BorderSide(
-                        color: Color(_isYesSelected && !_isNoSelected
+                    borderColor: Color(_isYesSelected && !_isNoSelected
                             ? 0xFF371382
                             : 0xFFD8DAE5),
-                        width: 2),
-                    shape: CircleBorder(),
+                    isCircle: true,
                     onChanged: (bool? value) {
                       if (value != null) {
                         bool? answer = value;
@@ -99,16 +98,15 @@ class _YesNoFormState extends ConsumerState<YesNoForm>
                 SizedBox(
                   height: 24,
                   width: 24,
-                  child: Checkbox(
+                  child: CustomCheckbox(
                     checkColor: Colors.white,
-                    fillColor: WidgetStateProperty.resolveWith(getColor),
+                    backgroundColor: _isNoSelected && !_isYesSelected?Color(
+                     0xFF371382):Colors.transparent,
                     value: _isNoSelected && !_isYesSelected,
-                    side: BorderSide(
-                        color: Color(_isNoSelected && !_isYesSelected
+                    borderColor:Color(_isNoSelected && !_isYesSelected
                             ? 0xFF371382
                             : 0xFFD8DAE5),
-                        width: 2),
-                    shape: CircleBorder(),
+                    isCircle: true,
                     onChanged: (bool? value) {
                       if (value != null) {
                         bool? answer = value;

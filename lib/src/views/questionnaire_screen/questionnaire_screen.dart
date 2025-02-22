@@ -116,13 +116,23 @@ class _QuestionnaireScreenState extends ConsumerState<QuestionnaireScreen> {
                     final questionnaire = ref.read(questionnaireStateProvider);
                     widget.firestoreService
                         .updateQuestionnaire(widget.doc, questionnaire);
+                    //instead of fetching th duration from an api I am generating one locally
+                    final randomDuration = viewModel.generateRandomDuration();
                     final doc = await widget.doc.get();
-                    doc.data();
-                    Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => BreakScreen(),
-                        ));
+                    if (doc.exists && mounted) {
+                      Map<String, dynamic> json =
+                          doc.data() as Map<String, dynamic>;
+                      final userData = UserData.fromJson(json);
+                      Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => BreakScreen(
+                              duration: randomDuration,
+                              username:
+                                  userData.userCredentials?.username ?? '',
+                            ),
+                          ));
+                    }
                   }
                 },
                 style: TextButton.styleFrom(

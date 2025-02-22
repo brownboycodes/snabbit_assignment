@@ -1,3 +1,4 @@
+//we use localized strings at my current organization
 class LoginScreenConstants {
   static const String title = "Login or Sign up to continue";
   static const String usernameHint = "Enter your username";

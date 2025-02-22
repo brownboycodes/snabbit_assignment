@@ -1,3 +1,4 @@
+//we use localized strings at my current organization
 class QuestionnaireScreenConstants {
   static const String title = "Skills";
   static const String subtitle = "Tell us a bit more about yourself";

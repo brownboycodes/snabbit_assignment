@@ -3,7 +3,7 @@ import 'package:syncfusion_flutter_gauges/gauges.dart';
 
 class TimerAnimation extends StatefulWidget {
   const TimerAnimation({super.key,required this.duration,required this.onCompletion});
-  final Duration duration;
+  final Duration? duration;
   final VoidCallback onCompletion;
 
   @override
@@ -150,7 +150,7 @@ _controller.addStatusListener((status) {
   }
   
   String getTimeLeft(double percentage){
-    final totalSecondsLeft = (widget.duration.inSeconds*(1-percentage)).toInt();
+    final totalSecondsLeft = ((widget.duration?.inSeconds??0)*(1-percentage)).toInt();
     int seconds=totalSecondsLeft;
     String time="";
     if(totalSecondsLeft>59){

@@ -61,6 +61,6 @@ class Questionnaire {
         hasUsedMaps: json['hasUsedMaps'],
         hasPhone: json['hasPhone'],
         hasPhoneForJob: json['hasPhoneForJob'],
-        dateOfBirth: json['dateOfBirth']);
+        dateOfBirth: DateTime.parse(json['dateOfBirth']));
   }
 }

@@ -1,5 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:take_a_break/take_a_break.dart';
+import 'dart:math';
+
 
 class QuestionnaireViewModel {
   QuestionnaireViewModel({required this.ref});
@@ -38,6 +40,12 @@ class QuestionnaireViewModel {
   bool validateForm() {
     return getFilledFormCount() == 5;
   }
+
+  Duration generateRandomDuration() {
+  final random = Random();
+  final seconds = random.nextInt(600 - 10 + 1) + 10;
+  return Duration(seconds: seconds);
+}
 }
 
 extension TasksDoneFormViewModel on QuestionnaireViewModel {

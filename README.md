@@ -4,13 +4,11 @@ An application which consists of 3 screens, Login, Questionnaire and Break scree
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+- Run`flutter pub get` to fetch all dependencies
+- Setup firebase by running `flutterfire configure`
+- `flutter run` to run the app on Android
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## About the Project
+- `Firestore` has been used as database
+- `Riverpod` has been used for state management
+- `Shared Preferences` has been used for persisting data

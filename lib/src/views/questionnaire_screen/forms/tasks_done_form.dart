@@ -41,44 +41,50 @@ class _TasksDoneFormState extends ConsumerState<TasksDoneForm>
             childAspectRatio: 157 / 24,
             children: Task.values
                 .map(
-                  (task) => Row(
-                    children: [
-                      SizedBox(
-                          height: 24,
-                          width: 24,
-                          child: Checkbox(
-                              checkColor: Colors.white,
-                              value: widget.viewModel.isTaskAdded(task),
-                              fillColor:
-                                  WidgetStateProperty.resolveWith(getColor),
-                              // value: _isNoSelected && !_isYesSelected,
-                              side: BorderSide(
-                                  color: Color(0xFFD8DAE5), width: 2),
-                              onChanged: (value) => widget.viewModel.onChanged(
-                                    value,
-                                    task,
-                                    onAdd: (task) {
-                                      selectedTasks.add(task);
-                                      setState(() {});
-                                    },
-                                    onRemove: (task) {
-                                      selectedTasks.remove(task);
-                                      setState(() {});
-                                    },
-                                  ))),
-                      const SizedBox(
-                        width: 4,
-                      ),
-                      Text(
-                        task.label,
-                        style: TextStyle(
-                            color: Color(0xFF525871),
-                            fontSize: 13,
-                            letterSpacing: -0.24,
-                            fontWeight: FontWeight.w500),
-                      )
-                    ],
-                  ),
+                  (task) {
+                    bool isTaskAdded = widget.viewModel.isTaskAdded(task);
+                return Row(
+                  children: [
+                    CustomCheckbox(
+                        checkColor: Colors.white,
+                        value: isTaskAdded,
+                        isCircle: false,
+                        // fillColor:
+                        // WidgetStateProperty.resolveWith(getColor),
+                        // value: _isNoSelected && !_isYesSelected,
+                        // side: BorderSide(
+                        //     color: Color(0xFFD8DAE5), width: 2),
+                        backgroundColor: isTaskAdded?Color(0xFF371382):Colors.transparent,
+                        borderColor: isTaskAdded
+                            ? Color(0xFF371382)
+                            : Color(0xFFD8DAE5),
+                        onChanged: (value) =>
+                            widget.viewModel.onChanged(
+                              value,
+                              task,
+                              onAdd: (task) {
+                                selectedTasks.add(task);
+                                setState(() {});
+                              },
+                              onRemove: (task) {
+                                selectedTasks.remove(task);
+                                setState(() {});
+                              },
+                            )),
+                    const SizedBox(
+                      width: 4,
+                    ),
+                    Text(
+                      task.label,
+                      style: TextStyle(
+                          color: Color(0xFF525871),
+                          fontSize: 13,
+                          letterSpacing: -0.24,
+                          fontWeight: FontWeight.w500),
+                    )
+                  ],
+                );
+              },
                 )
                 .toList()),
         const SizedBox(

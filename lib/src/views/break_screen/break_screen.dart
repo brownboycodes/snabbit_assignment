@@ -2,7 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:take_a_break/take_a_break.dart';
 
 class BreakScreen extends StatefulWidget {
-  const BreakScreen({super.key});
+  const BreakScreen({super.key, this.duration, required this.username});
+
+  final Duration? duration;
+
+  final String username;
 
   @override
   State<BreakScreen> createState() => _BreakScreenState();
@@ -11,6 +15,16 @@ class BreakScreen extends StatefulWidget {
 class _BreakScreenState extends State<BreakScreen> {
   bool _isCompleted = false;
   bool _isCancelled = false;
+  late DateTime currentTime;
+  late DateTime breakEndsAt;
+  @override
+  void initState() {
+    currentTime=DateTime.now();
+    breakEndsAt=currentTime.add(widget.duration??Duration.zero);
+    super.initState();
+  }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -128,7 +142,7 @@ class _BreakScreenState extends State<BreakScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Hi, Reshma!',
+                  'Hi, ${widget.username}!',
                   style: TextStyle(
                       fontSize: 13,
                       fontWeight: FontWeight.w600,
@@ -195,10 +209,14 @@ class _BreakScreenState extends State<BreakScreen> {
                                     decoration: BoxDecoration(
                                         color: Colors.white,
                                         shape: BoxShape.circle),
-                                    child: Icon(
-                                     _isCancelled?Icons.close : Icons.check,
-                                      size: 24,
-                                      color: Color(0xFF494FD8),
+                                    // child: Icon(
+                                    //  _isCancelled?Icons.close : Icons.check,
+                                    //   size: 24,
+                                    //   color: Color(0xFF494FD8),
+                                    // ),
+                                    child: Image.asset(
+                                      _isCancelled?AssetConstants.cancelled:AssetConstants.completed,
+                                      height: 24,width: 24,
                                     ),
                                   ),
                                 ],
@@ -237,7 +255,7 @@ class _BreakScreenState extends State<BreakScreen> {
                                   color: Color(0xFFF5FBF8)),
                             ),
                             TimerAnimation(
-                              duration: Duration(seconds: 103),
+                              duration: widget.duration,
                               onCompletion: () {
                                 setState(() {
                                   _isCompleted = true;

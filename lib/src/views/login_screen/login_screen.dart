@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:take_a_break/take_a_break.dart';
 
 class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key,required this.sharedPreferencesService});
+  const LoginScreen({super.key, required this.sharedPreferencesService});
 
   ///using dependency injection
   final SharedPreferencesService sharedPreferencesService;
@@ -66,7 +66,8 @@ class _LoginScreenState extends State<LoginScreen> with CheckboxHelperUtils {
                     onChanged: _onTextFormChanged,
                     decoration: InputDecoration(
                         hintText: LoginScreenConstants.usernameHint,
-                        contentPadding: EdgeInsets.symmetric(vertical: 15,horizontal: 16),
+                        contentPadding:
+                            EdgeInsets.symmetric(vertical: 15, horizontal: 16),
                         counter: const SizedBox()),
                     style: TextStyle(
                         color: Color(0xFF101840),
@@ -74,7 +75,9 @@ class _LoginScreenState extends State<LoginScreen> with CheckboxHelperUtils {
                         letterSpacing: -0.24,
                         fontWeight: FontWeight.w500)),
               ),
-              const SizedBox(height: 16,),
+              const SizedBox(
+                height: 16,
+              ),
               Container(
                 height: 50,
                 child: TextFormField(
@@ -104,7 +107,7 @@ class _LoginScreenState extends State<LoginScreen> with CheckboxHelperUtils {
                       counter: const SizedBox()),
                   style: TextStyle(
                       color: Color(0xFF101840),
-                      fontSize: passwordController.text.isNotEmpty? 28:13,
+                      fontSize: passwordController.text.isNotEmpty ? 28 : 13,
                       letterSpacing: -0.24,
                       fontWeight: FontWeight.w500),
                 ),
@@ -118,23 +121,21 @@ class _LoginScreenState extends State<LoginScreen> with CheckboxHelperUtils {
                   mainAxisAlignment: MainAxisAlignment.start,
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    SizedBox(
-                      height: 24,
-                      width: 24,
-                      child: Checkbox(
-                        checkColor: Colors.white,
-                        fillColor: WidgetStateProperty.resolveWith(getColor),
-                        value: _hasReferral,
-                        side: BorderSide(color: Color(0xFFD8DAE5), width: 2),
-                        shape: CircleBorder(),
-                        onChanged: (bool? value) {
-                          if (value != null) {
-                            setState(() {
-                              _hasReferral = value;
-                            });
-                          }
-                        },
-                      ),
+                    CustomCheckbox(
+                      checkColor: Colors.white,
+                      backgroundColor:
+                          _hasReferral ? Color(0xFF371382) : Colors.transparent,
+                      value: _hasReferral,
+                      borderColor:
+                          Color(_hasReferral ? 0xFF371382 : 0xFFD8DAE5),
+                      isCircle: true,
+                      onChanged: (bool? value) {
+                        if (value != null) {
+                          setState(() {
+                            _hasReferral = value;
+                          });
+                        }
+                      },
                     ),
                     const SizedBox(
                       width: 4,
@@ -161,7 +162,7 @@ class _LoginScreenState extends State<LoginScreen> with CheckboxHelperUtils {
                           letterSpacing: -0.24),
                       children: [
                     WidgetSpan(
-                        alignment: PlaceholderAlignment.bottom,
+                        alignment: PlaceholderAlignment.middle,
                         child: InkWell(
                           child: Text(LoginScreenConstants.termsOfUse,
                               style: TextStyle(
@@ -174,7 +175,7 @@ class _LoginScreenState extends State<LoginScreen> with CheckboxHelperUtils {
                         )),
                     TextSpan(text: " & "),
                     WidgetSpan(
-                        alignment: PlaceholderAlignment.bottom,
+                        alignment: PlaceholderAlignment.middle,
                         child: InkWell(
                           customBorder: Border(
                               bottom: BorderSide(color: Color(0xFF525871))),
